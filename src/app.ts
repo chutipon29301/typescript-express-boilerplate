@@ -1,19 +1,14 @@
-import { json } from "body-parser";
-import express, { urlencoded } from "express";
-import expressValidator from "express-validator";
-import helmet from "helmet";
-import morgan from "morgan";
-import { join } from "path";
-import { router } from "./router";
-import logger from "./util/logger";
+import { json } from 'body-parser';
+import express, { Express, urlencoded } from 'express';
+import expressValidator from 'express-validator';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import router from './routers/index';
 
-const app = express();
+const app: Express = express();
 
 // Set running port form environment
-app.set("port", process.env.PORT || 3000);
-
-// Static file
-app.use(express.static(join(__dirname, "../public")));
+app.set('port', process.env.PORT || 3000);
 
 // Middleware for secure server
 app.use(helmet());
@@ -26,23 +21,18 @@ app.use(urlencoded({ extended: true }));
 app.use(expressValidator());
 
 // Logger for express
-app.use(
-    morgan("dev", {
-        stream: {
-            write(text: string) {
-                logger.info(text);
-            },
-        },
-    }),
-);
+app.use(morgan('dev'));
 
 app.use((_, res, next) => {
     // Allow access from other domain
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PATCH, DELETE");
+    res.header('Access-Control-Allow-Origin', '*');
     res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept",
+        'Access-Control-Allow-Methods',
+        'GET, POST, OPTIONS, PATCH, DELETE',
+    );
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept',
     );
     next();
 });
