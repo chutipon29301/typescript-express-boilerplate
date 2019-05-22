@@ -18,6 +18,6 @@
         }
     },
     "include": [
-        "src/**/*"
+        "src/**/*", "src/server.ts", "src/app.ts", "src/routers"
     ]
 }
